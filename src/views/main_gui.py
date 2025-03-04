@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtGui import QIntValidator
 from PyQt5 import uic
 from PyQt5.QtCore import QThread
@@ -44,7 +44,9 @@ class gui_clash(QMainWindow):
         )
 
         self.gold_reset_btn.clicked.connect(lambda: self.__resetar(self.lineEdit_gold))
-        self.elixir_reset_btn.clicked.connect(lambda: self.__resetar(self.lineEdit_elixir))
+        self.elixir_reset_btn.clicked.connect(
+            lambda: self.__resetar(self.lineEdit_elixir)
+        )
         self.dark_reset_btn.clicked.connect(lambda: self.__resetar(self.lineEdit_dark))
 
         self.parar.setEnabled(False)
@@ -59,15 +61,30 @@ class gui_clash(QMainWindow):
         except:
             pass
 
+    def __resetar(self, qlineedit: QLineEdit):
+        qlineedit.setText("")
+
+    def popup_erro(self, mensagem):
+        msg = QMessageBox()
+        msg.setWindowTitle("Erro")
+        msg.setText(mensagem)
+        msg.setIcon(QMessageBox.Information)
+        msg.exec_()
+
     def __inicializar_procura_de_vila(self):
         self.parar.setEnabled(True)
         self.procurar.setEnabled(False)
-        self.worker = ProcuradorDeVila(self.lineEdit_gold.text(), self.lineEdit_elixir.text(), self.lineEdit_dark.text())
+        self.worker = ProcuradorDeVila(
+            self.lineEdit_gold.text(),
+            self.lineEdit_elixir.text(),
+            self.lineEdit_dark.text(),
+        )
         self.thread2 = QThread()
 
         self.worker.moveToThread(self.thread2)
 
         self.thread2.started.connect(self.worker.run)
+        self.worker.message.connect(self.popup_erro)
         self.worker.finished.connect(self.thread2.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread2.finished.connect(self.thread2.deleteLater)
@@ -78,10 +95,7 @@ class gui_clash(QMainWindow):
 
     def __parar(self):
         if self.worker:
+            print("parou de procurar")
             self.worker.stop()
         self.parar.setEnabled(False)
         self.procurar.setEnabled(True)
-        print("parou de procurar")
-
-    def __resetar(self, inputbox):
-        inputbox.setText("")
