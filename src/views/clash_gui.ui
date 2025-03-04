@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../imagens/ps.png</normaloff>../imagens/ps.png</iconset>
+    <normaloff>../midia/logo/ps.png</normaloff>../midia/logo/ps.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -58,16 +58,23 @@
        </property>
        <property name="styleSheet">
         <string notr="true">QLineEdit {
-background-color: rgb(255, 255, 255);
-border: 2px solid rgb(3, 103, 103);
-border-radius: 50px;
+border: 2px solid rgb(45, 45, 45);
+border-radius: 10px;
+padding: 15px;
+background-color: rgb(104, 4, 19);
+}
+
+QLineEdit:hover {
+border: 2px solid rgb(45, 45, 45);
+background-color: rgb(114, 14, 29);
 }
 
 QLineEdit:focus {
-border: 2px solid rgb(255, 0, 0);
+border: 2px solid rgb(252, 230, 5);
+background-color: rgb(114, 14, 29);
+color: rgb(255, 255, 255)
 }
-
-font: 14pt &quot;Segoe Script&quot;;</string>
+</string>
        </property>
        <property name="placeholderText">
         <string>qtd de ouro a procurar</string>
@@ -89,33 +96,13 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../imagens/clash/gold.png</pixmap>
+        <pixmap>../midia/images/gold.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label">
-       <property name="styleSheet">
-        <string notr="true">font: 22pt &quot;Segoe Print&quot;;</string>
-       </property>
-       <property name="text">
-        <string>Elixir Thiago</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_3">
-       <property name="styleSheet">
-        <string notr="true">font: 22pt &quot;Segoe Print&quot;;</string>
-       </property>
-       <property name="text">
-        <string>Ouro</string>
        </property>
       </widget>
      </item>
@@ -131,7 +118,7 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../imagens/clash/dark_elixir.png</pixmap>
+        <pixmap>../midia/images/dark_elixir.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -153,29 +140,26 @@ font: 14pt &quot;Segoe Script&quot;;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QLineEdit {
-background-color: rgb(255, 255, 255);
-border: 2px solid rgb(3, 103, 103);
-border-radius: 50px;
+border: 2px solid rgb(45, 45, 45);
+border-radius: 10px;
+padding: 15px;
+background-color: rgb(104, 4, 19);
+}
+
+QLineEdit:hover {
+border: 2px solid rgb(45, 45, 45);
+background-color: rgb(114, 14, 29);
 }
 
 QLineEdit:focus {
-border: 2px solid rgb(255, 0, 0);
+border: 2px solid rgb(252, 230, 5);
+background-color: rgb(114, 14, 29);
+color: rgb(255, 255, 255)
 }
-
-font: 14pt &quot;Segoe Script&quot;;</string>
+</string>
        </property>
        <property name="placeholderText">
         <string>qtd de elixir thiago a procurar</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_2">
-       <property name="styleSheet">
-        <string notr="true">font: 22pt &quot;Segoe Print&quot;;</string>
-       </property>
-       <property name="text">
-        <string>Elixir</string>
        </property>
       </widget>
      </item>
@@ -191,16 +175,23 @@ font: 14pt &quot;Segoe Script&quot;;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QLineEdit {
-background-color: rgb(255, 255, 255);
-border: 2px solid rgb(3, 103, 103);
-border-radius: 50px;
+border: 2px solid rgb(45, 45, 45);
+border-radius: 10px;
+padding: 15px;
+background-color: rgb(104, 4, 19);
+}
+
+QLineEdit:hover {
+border: 2px solid rgb(45, 45, 45);
+background-color: rgb(114, 14, 29);
 }
 
 QLineEdit:focus {
-border: 2px solid rgb(255, 0, 0);
+border: 2px solid rgb(252, 230, 5);
+background-color: rgb(114, 14, 29);
+color: rgb(255, 255, 255)
 }
-
-font: 14pt &quot;Segoe Script&quot;;</string>
+</string>
        </property>
        <property name="placeholderText">
         <string>qtd de elixir a procurar</string>
@@ -219,7 +210,7 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../imagens/clash/elixir.png</pixmap>
+        <pixmap>../midia/images/elixir.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -235,14 +226,38 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <bool>true</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(207, 187, 4);</string>
+        <string notr="true">QPushButton{
+background-color: rgb(207, 187, 4);
+border: 2px solid rgb(67, 2, 12);
+border-radius: 5px;
+color: rgb(255, 255, 255);
+}
+
+
+QPushButton:hover{
+background-color: rgb(114, 4, 19);
+border: 2px solid rgb(77, 12, 22);
+}
+
+QPushButton:pressed{
+background-color: rgb(252, 230, 5);
+border: 2px solid rgb(57, 0, 2);
+color: rgb(0, 0, 0)
+}
+
+QPushButton:disabled {
+background-color: #cccccc; /* Cinza */
+ border: 2px solid #999999;
+color: #666666; /* Texto cinza escuro */
+}
+</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../imagens/reset_png.png</normaloff>../imagens/reset_png.png</iconset>
+         <normaloff>../midia/images/reset_png.png</normaloff>../midia/images/reset_png.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -258,14 +273,38 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <bool>true</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(207, 187, 4);</string>
+        <string notr="true">QPushButton{
+background-color: rgb(207, 187, 4);
+border: 2px solid rgb(67, 2, 12);
+border-radius: 5px;
+color: rgb(255, 255, 255);
+}
+
+
+QPushButton:hover{
+background-color: rgb(114, 4, 19);
+border: 2px solid rgb(77, 12, 22);
+}
+
+QPushButton:pressed{
+background-color: rgb(252, 230, 5);
+border: 2px solid rgb(57, 0, 2);
+color: rgb(0, 0, 0)
+}
+
+QPushButton:disabled {
+background-color: #cccccc; /* Cinza */
+ border: 2px solid #999999;
+color: #666666; /* Texto cinza escuro */
+}
+</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../imagens/reset_png.png</normaloff>../imagens/reset_png.png</iconset>
+         <normaloff>../midia/images/reset_png.png</normaloff>../midia/images/reset_png.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -281,20 +320,98 @@ font: 14pt &quot;Segoe Script&quot;;</string>
         <bool>true</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(207, 187, 4);</string>
+        <string notr="true">QPushButton{
+background-color: rgb(207, 187, 4);
+border: 2px solid rgb(67, 2, 12);
+border-radius: 5px;
+color: rgb(255, 255, 255);
+}
+
+
+QPushButton:hover{
+background-color: rgb(114, 4, 19);
+border: 2px solid rgb(77, 12, 22);
+}
+
+QPushButton:pressed{
+background-color: rgb(252, 230, 5);
+border: 2px solid rgb(57, 0, 2);
+color: rgb(0, 0, 0)
+}
+
+QPushButton:disabled {
+background-color: #cccccc; /* Cinza */
+ border: 2px solid #999999;
+color: #666666; /* Texto cinza escuro */
+}
+</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../imagens/reset_png.png</normaloff>../imagens/reset_png.png</iconset>
+         <normaloff>../midia/images/reset_png.png</normaloff>../midia/images/reset_png.png</iconset>
        </property>
        <property name="iconSize">
         <size>
          <width>20</width>
          <height>20</height>
         </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <family>Arial Black</family>
+         <pointsize>22</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>OURO</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>Arial Black</family>
+         <pointsize>22</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>ELIXIR</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <family>Arial Black</family>
+         <pointsize>22</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>ELIXIR THIAGO</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -360,7 +477,7 @@ border: 5px solid rgb(0, 0, 0);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../imagens/ps.png</pixmap>
+     <pixmap>../midia/logo/ps.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -390,15 +507,30 @@ border: 5px solid rgb(0, 0, 0);</string>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">
-QPushButton{
-background-color: rgb(252, 230, 5);
+        <string notr="true">QPushButton{
+background-color: rgb(104, 4, 19);
+border: 2px solid rgb(67, 2, 12);
+border-radius: 10px;
+color: rgb(255, 255, 255);
 }
+
 
 QPushButton:hover{
-background-color: rgb(165, 149, 3);
+background-color: rgb(114, 4, 19);
+border: 2px solid rgb(77, 12, 22);
 }
 
+QPushButton:pressed{
+background-color: rgb(252, 230, 5);
+border: 2px solid rgb(57, 0, 2);
+color: rgb(0, 0, 0)
+}
+
+QPushButton:disabled {
+background-color: #cccccc; /* Cinza */
+ border: 2px solid #999999;
+color: #666666; /* Texto cinza escuro */
+}
 </string>
        </property>
        <property name="text">
@@ -417,15 +549,30 @@ background-color: rgb(165, 149, 3);
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">
-QPushButton{
-background-color: rgb(252, 230, 5);
+        <string notr="true">QPushButton{
+background-color: rgb(104, 4, 19);
+border: 2px solid rgb(67, 2, 12);
+border-radius: 10px;
+color: rgb(255, 255, 255);
 }
+
 
 QPushButton:hover{
-background-color: rgb(165, 149, 3);
+background-color: rgb(114, 4, 19);
+border: 2px solid rgb(77, 12, 22);
 }
 
+QPushButton:pressed{
+background-color: rgb(252, 230, 5);
+border: 2px solid rgb(57, 0, 2);
+color: rgb(0, 0, 0)
+}
+
+QPushButton:disabled {
+background-color: #cccccc; /* Cinza */
+ border: 2px solid #999999;
+color: #666666; /* Texto cinza escuro */
+}
 </string>
        </property>
        <property name="text">
