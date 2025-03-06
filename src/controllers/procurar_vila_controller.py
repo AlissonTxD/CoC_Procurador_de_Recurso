@@ -2,7 +2,8 @@ from collections import namedtuple
 from time import sleep
 
 from playsound import playsound
-from pyautogui import pixelMatchesColor,click
+from pyautogui import pixelMatchesColor, click
+import pygetwindow as gw
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from src.models.image_editor_model import ImageGeneratorModel
@@ -10,6 +11,8 @@ from src.models.image_editor_model import ImageGeneratorModel
 PATH_IMAGEM_GOLD = "src/midia/temp/gold.png"
 PATH_IMAGEM_ELIXIR = "src/midia/temp/elixir.png"
 PATH_IMAGEM_DARK = "src/midia/temp/dark.png"
+WINDOW_TITLE = "Clash of Clans"
+
 
 class ProcuradorDeVilaController(QObject):
     finished = pyqtSignal()
@@ -54,8 +57,12 @@ class ProcuradorDeVilaController(QObject):
                 if vila_carregada or not self.rodando:
                     break
                 sleep(0.5)
+            sleep(0.5)
+            self.__focar_na_janela(WINDOW_TITLE)
+            sleep(1)
 
             while self.rodando:
+                if not self.__janela_em_foco(WINDOW_TITLE):break
                 self.image_generator.gerar_imagens()
                 ouro_na_vila, elixir_na_vila, dark_na_vila = self.__salvar_resultados_da_leitura()
                 print(ouro_na_vila, elixir_na_vila, dark_na_vila)
@@ -73,6 +80,7 @@ class ProcuradorDeVilaController(QObject):
                     click(x=self.pixel_verificador.x, y=self.pixel_verificador.y)
                     
                 sleep(2)
+                if not self.__janela_em_foco(WINDOW_TITLE):break
                 while True:
                     print("Aguardando proxima vila...")
                     vila_carregada = pixelMatchesColor(
@@ -84,7 +92,7 @@ class ProcuradorDeVilaController(QObject):
                         self.pixel_verificador.y,
                         (self.rgb2.r, self.rgb2.g, self.rgb2.b),
                     )
-                    if vila_carregada or not self.rodando:
+                    if vila_carregada or not self.rodando or not self.__janela_em_foco(WINDOW_TITLE):
                         break
                     sleep(0.5)
 
@@ -141,3 +149,24 @@ class ProcuradorDeVilaController(QObject):
         elixir_na_vila = self.__ler_imagem(PATH_IMAGEM_ELIXIR)
         dark_na_vila = self.__ler_imagem(PATH_IMAGEM_DARK)
         return ouro_na_vila, elixir_na_vila, dark_na_vila
+    
+    def __janela_em_foco(self, nome_da_janela) -> bool:
+        try:
+            janela_ativa = gw.getActiveWindow()
+            if janela_ativa is not None and janela_ativa.title == nome_da_janela:
+                return True
+            else:
+                print("break por falta de foco na janela")
+                return False
+        except Exception as e:
+            print(f"Erro ao verificar janela: {e}")
+            return False
+        
+    def __focar_na_janela(self, nome_da_janela) -> None:
+        try:
+            janela = gw.getWindowsWithTitle(nome_da_janela)[0]
+            janela.activate()
+        except IndexError:
+            print(f"Janela com o título '{nome_da_janela}' não encontrada.")
+        except Exception as e:
+            print(f"Erro ao focar na janela: {e}")
