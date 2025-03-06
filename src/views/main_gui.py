@@ -1,28 +1,24 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtGui import QIntValidator
 from PyQt5 import uic
-from PyQt5.QtCore import QThread
 
-from src.controllers.procurar_vila_controller import ProcuradorDeVila
 
 UI_PATH = "src/views/clash_gui.ui"
 
 
-class gui_clash(QMainWindow):
-    def __init__(self):
+class MainGuiView(QMainWindow):
+    def __init__(self, constructor):
         super().__init__()
         uic.loadUi(UI_PATH, self)
-        # Definindo Variaveis
-        self.worker = None
-        self.thread2 = None
+        self.constructor = constructor
 
         # Definindo widgets
         self.lineEdit_gold = self.findChild(QLineEdit, "lineEdit_gold")
         self.lineEdit_elixir = self.findChild(QLineEdit, "lineEdit_elixir")
         self.lineEdit_dark = self.findChild(QLineEdit, "lineEdit_dark")
 
-        self.procurar = self.findChild(QPushButton, "procurar")
-        self.parar = self.findChild(QPushButton, "parar")
+        self.btn_procurar = self.findChild(QPushButton, "procurar")
+        self.btn_parar = self.findChild(QPushButton, "parar")
 
         self.gold_reset_btn = self.findChild(QPushButton, "reset_gold")
         self.elixir_reset_btn = self.findChild(QPushButton, "reset_elixir")
@@ -49,9 +45,10 @@ class gui_clash(QMainWindow):
         )
         self.dark_reset_btn.clicked.connect(lambda: self.__resetar(self.lineEdit_dark))
 
-        self.parar.setEnabled(False)
-        self.procurar.clicked.connect(self.__inicializar_procura_de_vila)
-        self.parar.clicked.connect(self.__parar)
+        self.btn_parar.setEnabled(False)
+        self.btn_procurar.setEnabled(False)
+        self.btn_procurar.clicked.connect(self.__inicializar_procura_de_vila)
+        self.btn_parar.clicked.connect(self.__parar)
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:
         try:
@@ -72,30 +69,7 @@ class gui_clash(QMainWindow):
         msg.exec_()
 
     def __inicializar_procura_de_vila(self):
-        self.parar.setEnabled(True)
-        self.procurar.setEnabled(False)
-        self.worker = ProcuradorDeVila(
-            self.lineEdit_gold.text(),
-            self.lineEdit_elixir.text(),
-            self.lineEdit_dark.text(),
-        )
-        self.thread2 = QThread()
-
-        self.worker.moveToThread(self.thread2)
-
-        self.thread2.started.connect(self.worker.run)
-        self.worker.message.connect(self.popup_erro)
-        self.worker.finished.connect(self.thread2.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread2.finished.connect(self.thread2.deleteLater)
-        self.worker.finished.connect(self.__parar)
-
-        self.thread2.start()
-        print("começando Procura")
+        self.constructor.iniciar_procura()
 
     def __parar(self):
-        if self.worker:
-            print("parou de procurar")
-            self.worker.stop()
-        self.parar.setEnabled(False)
-        self.procurar.setEnabled(True)
+        self.constructor.parar()
