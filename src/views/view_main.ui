@@ -154,7 +154,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout">
              <item row="2" column="2">
-              <widget class="QLineEdit" name="lineedit3_dark">
+              <widget class="QLineEdit" name="lineedit_dark">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -195,7 +195,7 @@ color: rgb(255, 255, 255)
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QLineEdit" name="lineedit2_elixir">
+              <widget class="QLineEdit" name="lineedit_elixir">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -348,7 +348,7 @@ color: #666666; /* Texto cinza escuro */
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QLineEdit" name="lineedit1_gold">
+              <widget class="QLineEdit" name="lineedit_gold">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -755,6 +755,16 @@ color: #666666; /* Texto cinza escuro */
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineedit_gold</tabstop>
+  <tabstop>lineedit_elixir</tabstop>
+  <tabstop>lineedit_dark</tabstop>
+  <tabstop>btn_search</tabstop>
+  <tabstop>btn_stop</tabstop>
+  <tabstop>btn_reset_gold</tabstop>
+  <tabstop>btn_reset_elixir</tabstop>
+  <tabstop>btn_reset_dark</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
