@@ -45,8 +45,8 @@ class MainGuiView(QMainWindow):
         )
         self.dark_reset_btn.clicked.connect(lambda: self.__resetar(self.lineEdit_dark))
 
-        self.btn_parar.setEnabled(False)
-        self.btn_procurar.setEnabled(False)
+        self.btn_parar.setEnabled(True)
+        self.btn_procurar.setEnabled(True)
         self.btn_procurar.clicked.connect(self.__inicializar_procura_de_vila)
         self.btn_parar.clicked.connect(self.__parar)
 
@@ -69,7 +69,7 @@ class MainGuiView(QMainWindow):
         msg.exec_()
 
     def __inicializar_procura_de_vila(self):
-        self.constructor.iniciar_procura()
+        print("inicando procura de vila")
 
     def __parar(self):
-        self.constructor.parar()
+        print("parou")
