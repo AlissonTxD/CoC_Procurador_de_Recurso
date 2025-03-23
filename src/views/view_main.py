@@ -67,6 +67,11 @@ class MainGuiView(QMainWindow):
         self.btn_stop.clicked.connect(self.__parar)
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:
+        """formats the given QLineEdit to a number format.
+
+        Args:
+            qlineedit (QLineEdit): QLineEdit to be formatted.
+        """
         try:
             numero = qlineedit.text().replace(".", "")
             numero_formatado = "{:,}".format(int(numero)).replace(",", ".")
@@ -74,17 +79,32 @@ class MainGuiView(QMainWindow):
         except:
             pass
 
-    def __resetar(self, qlineedit: QLineEdit):
+    def __resetar(self, qlineedit: QLineEdit) -> None:
+        """resets the given QLineEdit.
+
+        Args:
+            qlineedit (QLineEdit): qlinedit to be reseted.
+        """
         qlineedit.setText("")
 
-    def popup_erro(self, mensagem):
+    def popup_erro(self, mensagem: str) -> None:
+        """shows a popup with the given message.
+
+        Args:
+            mensagem (str): message to be shown.
+        """
         msg = QMessageBox()
         msg.setWindowTitle("Erro")
         msg.setText(mensagem)
         msg.setIcon(QMessageBox.Information)
         msg.exec_()
 
-    def tooltip(self, text: str= ""):
+    def tooltip(self, text: str= "") -> None:
+        """Shows a tooltip with the given text. If the text is empty, the tooltip is hidden.
+
+        Args:
+            text (str, optional): text to be show. Defaults to "".
+        """
         if self.tooltip_widget.isVisible() and text == "" or text == "":
             self.tooltip_widget.hide()
         else:
@@ -92,12 +112,18 @@ class MainGuiView(QMainWindow):
             self.tooltip_widget.adjustSize()
             self.tooltip_widget.show()
     
-    def __inicializar_procura_de_vila(self):
+    def __inicializar_procura_de_vila(self)-> None:
+        """Enables the stop button and disables the search button. Starts the search.
+        """
+        self.btn_stop.setEnabled(True)
+        self.btn_search.setEnabled(False)
         self.tooltip("Buscando Vilas com Recursos")
         self.controller_main.search()
-        self.btn_stop.setEnabled(True)
 
-    def __parar(self):
+    def __parar(self) -> None:
+        """Disables the stop button and enables the search button. Stops the search.
+        """
+        self.btn_stop.setEnabled(False)
+        self.btn_search.setEnabled(True)
         self.tooltip()
         self.controller_main.stop()
-        self.btn_stop.setEnabled(False)
