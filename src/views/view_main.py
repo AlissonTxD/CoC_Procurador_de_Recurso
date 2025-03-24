@@ -3,8 +3,6 @@ from PyQt5.QtGui import QIntValidator
 from PyQt5.QtCore import Qt
 from PyQt5 import uic
 
-from src.controllers.controller_main import ControllerMain
-
 
 UI_PATH = "src/views/view_main.ui"
 
@@ -22,49 +20,59 @@ class ToolTipWindow(QLabel):
         self.move(0,0)
 
 class MainGuiView(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi(UI_PATH, self)
-        self.tooltip_widget = ToolTipWindow("", self)
-        self.controller_main = ControllerMain()
+    __instance = None
 
-        # Definindo widgets
-        self.lineedit_gold: QLineEdit = self.findChild(QLineEdit, "lineedit_gold")
-        self.lineedit_elixir = self.findChild(QLineEdit, "lineedit_elixir")
-        self.lineedit_dark = self.findChild(QLineEdit, "lineedit_dark")
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+            cls.__instance.initialized = False
+        return cls.__instance
 
-        self.btn_search = self.findChild(QPushButton, "btn_search")
-        self.btn_stop = self.findChild(QPushButton, "btn_stop")
+    def __init__(self, controller = None):
+        if not self.initialized:
+            super(MainGuiView, self).__init__()
+            self.initialized = True
+            uic.loadUi(UI_PATH, self)
+            self.tooltip_widget = ToolTipWindow("", self)
+            self.controller_main = controller
 
-        self.btn_reset_gold = self.findChild(QPushButton, "btn_reset_gold")
-        self.btn_reset_elixir = self.findChild(QPushButton, "btn_reset_elixir")
-        self.btn_reset_dark = self.findChild(QPushButton, "btn_reset_dark")
+            # Definindo widgets
+            self.lineedit_gold: QLineEdit = self.findChild(QLineEdit, "lineedit_gold")
+            self.lineedit_elixir = self.findChild(QLineEdit, "lineedit_elixir")
+            self.lineedit_dark = self.findChild(QLineEdit, "lineedit_dark")
 
-        # Configurando Widgets
-        self.lineedit_gold.setValidator(QIntValidator())
-        self.lineedit_elixir.setValidator(QIntValidator())
-        self.lineedit_dark.setValidator(QIntValidator())
+            self.btn_search = self.findChild(QPushButton, "btn_search")
+            self.btn_stop = self.findChild(QPushButton, "btn_stop")
 
-        self.lineedit_gold.textChanged.connect(
-            lambda: self.__formatar_numero(self.lineedit_gold)
-        )
-        self.lineedit_elixir.textChanged.connect(
-            lambda: self.__formatar_numero(self.lineedit_elixir)
-        )
-        self.lineedit_dark.textChanged.connect(
-            lambda: self.__formatar_numero(self.lineedit_dark)
-        )
+            self.btn_reset_gold = self.findChild(QPushButton, "btn_reset_gold")
+            self.btn_reset_elixir = self.findChild(QPushButton, "btn_reset_elixir")
+            self.btn_reset_dark = self.findChild(QPushButton, "btn_reset_dark")
 
-        self.btn_reset_gold.clicked.connect(lambda: self.__resetar(self.lineedit_gold))
-        self.btn_reset_elixir.clicked.connect(
-            lambda: self.__resetar(self.lineedit_elixir)
-        )
-        self.btn_reset_dark.clicked.connect(lambda: self.__resetar(self.lineedit_dark))
+            # Configurando Widgets
+            self.lineedit_gold.setValidator(QIntValidator())
+            self.lineedit_elixir.setValidator(QIntValidator())
+            self.lineedit_dark.setValidator(QIntValidator())
 
-        self.btn_search.setEnabled(True)
-        self.btn_stop.setEnabled(False)
-        self.btn_search.clicked.connect(self.__inicializar_procura_de_vila)
-        self.btn_stop.clicked.connect(self.__parar)
+            self.lineedit_gold.textChanged.connect(
+                lambda: self.__formatar_numero(self.lineedit_gold)
+            )
+            self.lineedit_elixir.textChanged.connect(
+                lambda: self.__formatar_numero(self.lineedit_elixir)
+            )
+            self.lineedit_dark.textChanged.connect(
+                lambda: self.__formatar_numero(self.lineedit_dark)
+            )
+
+            self.btn_reset_gold.clicked.connect(lambda: self.__resetar(self.lineedit_gold))
+            self.btn_reset_elixir.clicked.connect(
+                lambda: self.__resetar(self.lineedit_elixir)
+            )
+            self.btn_reset_dark.clicked.connect(lambda: self.__resetar(self.lineedit_dark))
+
+            self.btn_search.setEnabled(True)
+            self.btn_stop.setEnabled(False)
+            self.btn_search.clicked.connect(self.__inicializar_procura_de_vila)
+            self.btn_stop.clicked.connect(self.parar)
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:
         """formats the given QLineEdit to a number format.
@@ -120,7 +128,7 @@ class MainGuiView(QMainWindow):
         self.tooltip("Buscando Vilas com Recursos")
         self.controller_main.search()
 
-    def __parar(self) -> None:
+    def parar(self) -> None:
         """Disables the stop button and enables the search button. Stops the search.
         """
         self.btn_stop.setEnabled(False)
