@@ -1,19 +1,20 @@
 from collections import namedtuple
 import os
+from time import sleep
 
 from pyautogui import screenshot
 from PIL import Image, ImageEnhance, ImageOps
 
 CoordCut = namedtuple("Corte", "x1 y1 x2 y2")
-FATORES_IMG = [2.0, 0.5, 1.0, 2.5]
-GOLD_CUT = CoordCut(150, 140, 284, 176)
-ELIXIR_CUT = CoordCut(150, 188, 284, 217)
-DARK_CUT = CoordCut(150, 220, 250, 270)
+IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
+GOLD_CUT = (186, 145, 310, 175)
+ELIXIR_CUT = (186, 188, 310, 187 + 30)
+DARK_CUT = (186, 230, 310, 260)
 
-PATH_IMAGEM_MAIN = "temp/clash.png"
-PATH_IMAGEM_GOLD = "temp/gold.png"
-PATH_IMAGEM_ELIXIR = "temp/elixir.png"
-PATH_IMAGEM_DARK = "temp/dark.png"
+MAIN_IMAGE_PATH = "temp/clash.png"
+GOLD_IMAGE_PATH = "temp/gold.png"
+ELIXIR_IMAGE_PATH = "temp/elixir.png"
+DARK_IMAGE_PATH = "temp/dark.png"
 
 
 class ImageGerenatorModel:
@@ -21,26 +22,41 @@ class ImageGerenatorModel:
         try:
             self.__take_screenshot()
             self.__enchance_image()
+            self.__generate_sub_images()
         except Exception as exception:
-            print(str(exception))
+            print(exception)
 
     def __take_screenshot(self) -> None:
         """Takes a screenshot of the screen and saves it to a file.
         """
-        first_image = screenshot()
-        first_image.save(PATH_IMAGEM_MAIN)
+        try:
+            first_image = screenshot()
+            first_image.save(MAIN_IMAGE_PATH)
+        except FileNotFoundError:
+            os.makedirs("temp")
+            self.__take_screenshot()
 
     def __enchance_image(self):
         """Enhances the image to make it easier to read the numbers.
         """
-        img = Image.open(PATH_IMAGEM_MAIN).convert("RGB")
-        img = ImageEnhance.Contrast(img).enhance(FATORES_IMG[0])
-        img = ImageEnhance.Color(img).enhance(FATORES_IMG[1])
-        img = ImageEnhance.Brightness(img).enhance(FATORES_IMG[2])
-        img = ImageEnhance.Sharpness(img).enhance(FATORES_IMG[3])
+        img = Image.open(MAIN_IMAGE_PATH).convert("RGB")
+        img = ImageEnhance.Contrast(img).enhance(IMG_FACTORS[0])
+        img = ImageEnhance.Color(img).enhance(IMG_FACTORS[1])
+        img = ImageEnhance.Brightness(img).enhance(IMG_FACTORS[2])
+        img = ImageEnhance.Sharpness(img).enhance(IMG_FACTORS[3])
         img = ImageOps.invert(img)
         img = img.convert("L")
-        img.save(PATH_IMAGEM_MAIN)
+        img.save(MAIN_IMAGE_PATH)
+
+    def __generate_sub_images(self):
+        self.__cut_image(GOLD_CUT,GOLD_IMAGE_PATH)
+        self.__cut_image(ELIXIR_CUT,ELIXIR_IMAGE_PATH)
+        self.__cut_image(DARK_CUT,DARK_IMAGE_PATH)
+        
+    def __cut_image(self, cut_tuple, path):
+        img = Image.open(MAIN_IMAGE_PATH)
+        cutted_img = img.crop(cut_tuple)
+        cutted_img.save(path)
 
 
 if __name__ == "__main__":

@@ -620,7 +620,7 @@ color: #666666; /* Texto cinza escuro */
 </string>
                </property>
                <property name="text">
-                <string>Procurar</string>
+                <string>Carregando</string>
                </property>
               </widget>
              </item>

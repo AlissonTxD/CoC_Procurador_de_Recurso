@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIntValidator
 from PyQt5.QtCore import Qt
 from PyQt5 import uic
 
+from src.models.model_ocr_loader import OCRLoader
 
 UI_PATH = "src/views/view_main.ui"
 
@@ -35,6 +36,8 @@ class MainGuiView(QMainWindow):
             uic.loadUi(UI_PATH, self)
             self.tooltip_widget = ToolTipWindow("", self)
             self.controller_main = controller
+            self.ocr = None
+            self.minimum = ()
 
             # Definindo widgets
             self.lineedit_gold: QLineEdit = self.findChild(QLineEdit, "lineedit_gold")
@@ -69,10 +72,12 @@ class MainGuiView(QMainWindow):
             )
             self.btn_reset_dark.clicked.connect(lambda: self.__resetar(self.lineedit_dark))
 
-            self.btn_search.setEnabled(True)
+            self.btn_search.setEnabled(False)
             self.btn_stop.setEnabled(False)
             self.btn_search.clicked.connect(self.__inicializar_procura_de_vila)
             self.btn_stop.clicked.connect(self.parar)
+
+            self.start_ocr_load()
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:
         """formats the given QLineEdit to a number format.
@@ -95,7 +100,8 @@ class MainGuiView(QMainWindow):
         """
         qlineedit.setText("")
 
-    def popup_erro(self, mensagem: str) -> None:
+
+    def popup_error(self, mensagem: str) -> None:
         """shows a popup with the given message.
 
         Args:
@@ -120,13 +126,15 @@ class MainGuiView(QMainWindow):
             self.tooltip_widget.adjustSize()
             self.tooltip_widget.show()
     
+
     def __inicializar_procura_de_vila(self)-> None:
-        """Enables the stop button and disables the search button. Starts the search.
+        """Starts the search.
         """
-        self.btn_stop.setEnabled(True)
-        self.btn_search.setEnabled(False)
-        self.tooltip("Buscando Vilas com Recursos")
-        self.controller_main.search()
+        if self.__verify_emptiness():
+            self.popup_error("Por favor, coloque pelomenos 1 valor para a procura")
+            return
+        self.minimum = self.__return_inputs()
+        self.controller_main.search(self.ocr)
 
     def parar(self) -> None:
         """Disables the stop button and enables the search button. Stops the search.
@@ -135,3 +143,31 @@ class MainGuiView(QMainWindow):
         self.btn_search.setEnabled(True)
         self.tooltip()
         self.controller_main.stop()
+
+
+    def __return_inputs(self):
+        input_tuple = (self.lineedit_gold.text(), self.lineedit_elixir.text(), self.lineedit_dark.text())
+        return input_tuple
+    
+    def __verify_emptiness(self):
+        gold_input_is_empty = self.lineedit_gold.text() == ""
+        elixir_input_is_empty = self.lineedit_elixir.text() == ""
+        dark_input_is_empty = self.lineedit_dark.text() == ""
+        if gold_input_is_empty and elixir_input_is_empty and dark_input_is_empty:
+            return True
+
+
+    def start_ocr_load(self):
+        self.worker = OCRLoader()
+        self.worker.loaded.connect(self.on_ocr_loaded)
+        self.worker.error.connect(self.on_ocr_error)
+        self.worker.start()  # Inicia a thread
+        print("Carregando OCR em segundo plano...")
+
+    def on_ocr_loaded(self, ocr_instance):
+        self.ocr = ocr_instance
+        self.btn_search.setText("Procurar")
+        self.btn_search.setEnabled(True)
+        
+    def on_ocr_error(self, error_msg):
+        self.popup_error(f"Erro: {error_msg}")
