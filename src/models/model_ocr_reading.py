@@ -1,8 +1,12 @@
+from PyQt5.QtCore import QObject, pyqtSignal
+
+from pyautogui import pixelMatchesColor, click
+
+from src.models.model_image_generator import ImageGerenatorModel
+
 GOLD_IMAGE_PATH = "temp/gold.png"
 ELIXIR_IMAGE_PATH = "temp/elixir.png"
 DARK_IMAGE_PATH = "temp/dark.png"
-
-from src.models.model_image_generator import ImageGerenatorModel
 
 class SearchModel:
     def __init__(self, ocr, image_generator: ImageGerenatorModel, minimum):
@@ -12,7 +16,7 @@ class SearchModel:
 
     def run(self):
         self.__format_minimum(self.minimum)
-        #self.image_generator.generate_image()
+        self.image_generator.generate_image()
         self.read_response = self.__format_response_ocr()
         print(self.minimum)
         print(self.read_response)

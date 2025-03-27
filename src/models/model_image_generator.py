@@ -7,9 +7,9 @@ from PIL import Image, ImageEnhance, ImageOps
 
 CoordCut = namedtuple("Corte", "x1 y1 x2 y2")
 IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
-GOLD_CUT = (186, 145, 310, 175)
-ELIXIR_CUT = (186, 188, 310, 187 + 30)
-DARK_CUT = (186, 230, 310, 260)
+GOLD_CUT = (180, 145, 310, 175)
+ELIXIR_CUT = (180, 188, 310, 187 + 30)
+DARK_CUT = (180, 230, 310, 260)
 
 MAIN_IMAGE_PATH = "temp/clash.png"
 GOLD_IMAGE_PATH = "temp/gold.png"
@@ -23,6 +23,7 @@ class ImageGerenatorModel:
             self.__take_screenshot()
             self.__enchance_image()
             self.__generate_sub_images()
+            self.__resize_subimages()
         except Exception as exception:
             print(exception)
 
@@ -58,6 +59,15 @@ class ImageGerenatorModel:
         cutted_img = img.crop(cut_tuple)
         cutted_img.save(path)
 
+    def __resize_subimages(self):
+        self.__resize_image(GOLD_IMAGE_PATH)
+        self.__resize_image(ELIXIR_IMAGE_PATH)
+        self.__resize_image(DARK_IMAGE_PATH)    
+
+    def __resize_image(self, path):
+        img = Image.open(path)
+        img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
+        img.save(path)
 
 if __name__ == "__main__":
     model = ImageGerenatorModel()
