@@ -1,0 +1,1 @@
+#TODO model que ira ler a config do json e utilizara nas outras classes
