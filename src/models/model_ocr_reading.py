@@ -2,14 +2,14 @@ from collections import namedtuple
 from time import sleep
 
 from PyQt5.QtCore import QObject, pyqtSignal
-from pyautogui import pixelMatchesColor, click, pixel
+from pyautogui import pixelMatchesColor, click, pixel, moveTo
 from playsound import playsound
 
 from src.models.model_image_generator import ImageGerenatorModel
 
 Coord = namedtuple("Coord", "x y")
-TARGET_PIXEL = Coord(1679, 760)  # NOT
-#TARGET_PIXEL = Coord(1644, 733)  # PC
+#TARGET_PIXEL = Coord(1679, 760)  # NOT
+TARGET_PIXEL = Coord(1644, 733)  # PC
 RGB = (255, 255, 255)
 RGB2 = (224, 224, 224)
 
@@ -39,8 +39,9 @@ class SearchModel(QObject):
                     if self.__village_is_loaded():
                         print("Vila carregada")
                         break
-                    sleep(1)
+                    sleep(4)
                     pix = pixel(TARGET_PIXEL.x, TARGET_PIXEL.y)
+                    moveTo(TARGET_PIXEL.x, TARGET_PIXEL.y, duration=0.5)
                     print(f"Aguardando vila ser carregada: {pix}")
                 self.image_generator.generate_image()
                 village_resources = self.__format_response_ocr()
@@ -48,7 +49,7 @@ class SearchModel(QObject):
                 print(village_resources)
                 if self.__village_is_fat(self.minimum, village_resources):
                     print("Vila gorda encontrada")
-                    playsound(MP3_PATH, block=False)
+                    playsound(MP3_PATH)
                     break
                 else:
                     click(x= TARGET_PIXEL.x, y= TARGET_PIXEL.y)
