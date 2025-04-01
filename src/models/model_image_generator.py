@@ -8,7 +8,7 @@ from PIL import Image, ImageEnhance, ImageOps
 CoordCut = namedtuple("Corte", "x1 y1 x2 y2")
 IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
 GOLD_CUT = (180, 145, 310, 175)
-ELIXIR_CUT = (180, 188, 310, 187 + 30)
+ELIXIR_CUT = (180, 188, 310, 217)
 DARK_CUT = (180, 230, 310, 260)
 
 MAIN_IMAGE_PATH = "temp/clash.png"
