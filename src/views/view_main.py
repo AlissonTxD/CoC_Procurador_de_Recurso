@@ -1,24 +1,29 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit, QMessageBox,QLabel
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit, QMessageBox, QLabel
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtCore import Qt
 from PyQt5 import uic
 
 from src.models.model_ocr_loader import OCRLoader
+from src.utils import resource_path
 
-UI_PATH = "src/views/view_main.ui"
+UI_PATH = resource_path("src/views/view_main.ui")
+
 
 class ToolTipWindow(QLabel):
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         self.setWindowFlags(Qt.ToolTip | Qt.FramelessWindowHint)
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             background-color: #0f0f0f;
             color: white;
             padding: 2px;
             border-radius: 3px;
             font: 87 18pt "Arial Black";
-        """)
-        self.move(0,0)
+        """
+        )
+        self.move(0, 0)
+
 
 class MainGuiView(QMainWindow):
     __instance = None
@@ -29,7 +34,7 @@ class MainGuiView(QMainWindow):
             cls.__instance.initialized = False
         return cls.__instance
 
-    def __init__(self, controller = None):
+    def __init__(self, controller=None):
         if not self.initialized:
             super(MainGuiView, self).__init__()
             self.initialized = True
@@ -66,11 +71,15 @@ class MainGuiView(QMainWindow):
                 lambda: self.__formatar_numero(self.lineedit_dark)
             )
 
-            self.btn_reset_gold.clicked.connect(lambda: self.__resetar(self.lineedit_gold))
+            self.btn_reset_gold.clicked.connect(
+                lambda: self.__resetar(self.lineedit_gold)
+            )
             self.btn_reset_elixir.clicked.connect(
                 lambda: self.__resetar(self.lineedit_elixir)
             )
-            self.btn_reset_dark.clicked.connect(lambda: self.__resetar(self.lineedit_dark))
+            self.btn_reset_dark.clicked.connect(
+                lambda: self.__resetar(self.lineedit_dark)
+            )
 
             self.btn_search.setEnabled(False)
             self.btn_stop.setEnabled(False)
@@ -100,7 +109,6 @@ class MainGuiView(QMainWindow):
         """
         qlineedit.setText("")
 
-
     def popup_error(self, mensagem: str) -> None:
         """shows a popup with the given message.
 
@@ -113,7 +121,7 @@ class MainGuiView(QMainWindow):
         msg.setIcon(QMessageBox.Information)
         msg.exec_()
 
-    def tooltip(self, text: str= "") -> None:
+    def tooltip(self, text: str = "") -> None:
         """Shows a tooltip with the given text. If the text is empty, the tooltip is hidden.
 
         Args:
@@ -125,11 +133,9 @@ class MainGuiView(QMainWindow):
             self.tooltip_widget.setText(text)
             self.tooltip_widget.adjustSize()
             self.tooltip_widget.show()
-    
 
-    def __inicializar_procura_de_vila(self)-> None:
-        """Starts the search.
-        """
+    def __inicializar_procura_de_vila(self) -> None:
+        """Starts the search."""
         if self.__verify_emptiness():
             self.popup_error("Por favor, coloque pelomenos 1 valor para a procura")
             return
@@ -137,25 +143,26 @@ class MainGuiView(QMainWindow):
         self.controller_main.search(self.ocr)
 
     def parar(self) -> None:
-        """Disables the stop button and enables the search button. Stops the search.
-        """
+        """Disables the stop button and enables the search button. Stops the search."""
         self.btn_stop.setEnabled(False)
         self.btn_search.setEnabled(True)
         self.tooltip()
         self.controller_main.stop()
 
-
     def __return_inputs(self):
-        input_tuple = (self.lineedit_gold.text(), self.lineedit_elixir.text(), self.lineedit_dark.text())
+        input_tuple = (
+            self.lineedit_gold.text(),
+            self.lineedit_elixir.text(),
+            self.lineedit_dark.text(),
+        )
         return input_tuple
-    
+
     def __verify_emptiness(self):
         gold_input_is_empty = self.lineedit_gold.text() == ""
         elixir_input_is_empty = self.lineedit_elixir.text() == ""
         dark_input_is_empty = self.lineedit_dark.text() == ""
         if gold_input_is_empty and elixir_input_is_empty and dark_input_is_empty:
             return True
-
 
     def start_ocr_load(self):
         self.worker = OCRLoader()
@@ -168,6 +175,6 @@ class MainGuiView(QMainWindow):
         self.ocr = ocr_instance
         self.btn_search.setText("Procurar")
         self.btn_search.setEnabled(True)
-        
+
     def on_ocr_error(self, error_msg):
         self.popup_error(f"Erro: {error_msg}")

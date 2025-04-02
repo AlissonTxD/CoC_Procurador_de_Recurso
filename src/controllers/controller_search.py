@@ -7,13 +7,14 @@ from src.models.model_ocr_reading import SearchModel
 thread = None
 village_searcher = None
 
+
 def search_village():
     global thread, village_searcher
-    view = MainGuiView() 
+    view = MainGuiView()
     view.btn_stop.setEnabled(True)
     view.btn_search.setEnabled(False)
     view.tooltip("Buscando Vilas com Recursos")
-    
+
     img_generator = ImageGerenatorModel()
     village_searcher = SearchModel(view.ocr, img_generator, view.minimum)
     thread = QThread()
@@ -26,7 +27,8 @@ def search_village():
     village_searcher.finished.connect(stop_searching)
     thread.start()
     print("thread started")
-    
+
+
 def stop_searching():
     global thread, village_searcher
 
@@ -39,6 +41,7 @@ def stop_searching():
     view.btn_search.setEnabled(True)
     thread = None
     village_searcher = None
+
 
 def show_error(error_msg: str):
     print(error_msg)

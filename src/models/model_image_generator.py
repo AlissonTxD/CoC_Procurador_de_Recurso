@@ -28,8 +28,7 @@ class ImageGerenatorModel:
             print(exception)
 
     def __take_screenshot(self) -> None:
-        """Takes a screenshot of the screen and saves it to a file.
-        """
+        """Takes a screenshot of the screen and saves it to a file."""
         try:
             first_image = screenshot()
             first_image.save(MAIN_IMAGE_PATH)
@@ -38,8 +37,7 @@ class ImageGerenatorModel:
             self.__take_screenshot()
 
     def __enchance_image(self):
-        """Enhances the image to make it easier to read the numbers.
-        """
+        """Enhances the image to make it easier to read the numbers."""
         img = Image.open(MAIN_IMAGE_PATH).convert("RGB")
         img = ImageEnhance.Contrast(img).enhance(IMG_FACTORS[0])
         img = ImageEnhance.Color(img).enhance(IMG_FACTORS[1])
@@ -50,10 +48,10 @@ class ImageGerenatorModel:
         img.save(MAIN_IMAGE_PATH)
 
     def __generate_sub_images(self):
-        self.__cut_image(GOLD_CUT,GOLD_IMAGE_PATH)
-        self.__cut_image(ELIXIR_CUT,ELIXIR_IMAGE_PATH)
-        self.__cut_image(DARK_CUT,DARK_IMAGE_PATH)
-        
+        self.__cut_image(GOLD_CUT, GOLD_IMAGE_PATH)
+        self.__cut_image(ELIXIR_CUT, ELIXIR_IMAGE_PATH)
+        self.__cut_image(DARK_CUT, DARK_IMAGE_PATH)
+
     def __cut_image(self, cut_tuple, path):
         img = Image.open(MAIN_IMAGE_PATH)
         cutted_img = img.crop(cut_tuple)
@@ -62,12 +60,13 @@ class ImageGerenatorModel:
     def __resize_subimages(self):
         self.__resize_image(GOLD_IMAGE_PATH)
         self.__resize_image(ELIXIR_IMAGE_PATH)
-        self.__resize_image(DARK_IMAGE_PATH)    
+        self.__resize_image(DARK_IMAGE_PATH)
 
     def __resize_image(self, path):
         img = Image.open(path)
         img = img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
         img.save(path)
+
 
 if __name__ == "__main__":
     model = ImageGerenatorModel()
