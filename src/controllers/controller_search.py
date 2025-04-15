@@ -13,6 +13,7 @@ def search_village():
     global thread, village_searcher
     view = MainGuiView()
     config = ConfigModel()
+    view.stop_signal.connect(handle_stop_signal)
     config_data = config.get_json_data()
     view.btn_stop.setEnabled(True)
     view.btn_search.setEnabled(False)
@@ -43,6 +44,10 @@ def stop_searching():
     view.btn_search.setEnabled(True)
     thread = None
     village_searcher = None
+
+
+def handle_stop_signal():
+    village_searcher.stop()
 
 
 def show_error(error_msg: str):

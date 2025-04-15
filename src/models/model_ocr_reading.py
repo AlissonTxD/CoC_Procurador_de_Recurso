@@ -19,16 +19,20 @@ WINDOW_TITLE = "Clash of Clans"
 
 Coord = namedtuple("Coord", "x y")
 
+
 class SearchModel(QObject):
     finished = pyqtSignal()
     error = pyqtSignal(str)
 
-    def __init__(self, ocr, image_generator: ImageGerenatorModel, minimum, config: dict):
+    def __init__(
+        self, ocr, image_generator: ImageGerenatorModel, minimum, config: dict
+    ):
         super().__init__()
         self.image_generator = image_generator
         self.ocr = ocr
         self.minimum = minimum
         self.TARGET_PIXEL = Coord(config["target"][0], config["target"][1])
+        self._running = True
 
     def run(self):
         try:
@@ -38,13 +42,18 @@ class SearchModel(QObject):
             sleep(1)
             while True:
                 while True:
-                    if self.__village_is_loaded() or not self.__window_in_focus(WINDOW_TITLE):
+                    if (
+                        self.__village_is_loaded()
+                        or not self.__window_in_focus(WINDOW_TITLE)
+                        or not self._running
+                    ):
                         print("Vila carregada ou janela fora de foco")
                         break
                     sleep(1)
                     pix = pixel(self.TARGET_PIXEL.x, self.TARGET_PIXEL.y)
                     print(f"Aguardando vila ser carregada: {pix}")
-                if not self.__window_in_focus(WINDOW_TITLE): break
+                if not self.__window_in_focus(WINDOW_TITLE) or not self._running:
+                    break
                 self.image_generator.generate_image()
                 village_resources = self.__format_response_ocr()
                 print(self.minimum)
@@ -113,24 +122,29 @@ class SearchModel(QObject):
             if min != 0 and resource < min:
                 return False
         return True
-    
+
     def __focus_in_window(self, window_name) -> None:
-         try:
-             window = gw.getWindowsWithTitle(window_name)[0]
-             window.activate()
-         except IndexError:
-             print(f"Janela com o título '{window_name}' não encontrada.")
-         except Exception as e:
-             print(f"Erro ao focar na janela: {e}")
+        try:
+            window = gw.getWindowsWithTitle(window_name)[0]
+            window.activate()
+        except IndexError:
+            print(f"Janela com o título '{window_name}' não encontrada.")
+        except Exception as e:
+            print(f"Erro ao focar na janela: {e}")
 
     def __window_in_focus(self, window_name) -> bool:
-         try:
-             active_window = gw.getActiveWindow()
-             if active_window is not None and active_window.title == window_name:
-                 return True
-             else:
-                 print("break por falta de foco na janela")
-                 return False
-         except Exception as e:
-             print(f"Erro ao verificar janela: {e}")
-             return False
+        try:
+            active_window = gw.getActiveWindow()
+            if active_window is not None and active_window.title == window_name:
+                return True
+            else:
+                print("break por falta de foco na janela")
+                return False
+        except Exception as e:
+            print(f"Erro ao verificar janela: {e}")
+            return False
+
+    def stop(self) -> None:
+        """Stops the search."""
+        self._running = False
+        print("parou de procurar")

@@ -5,6 +5,3 @@ class ControllerMain:
 
     def search(self, ocr):
         search_village()
-
-    def stop(self):
-        stop_searching()

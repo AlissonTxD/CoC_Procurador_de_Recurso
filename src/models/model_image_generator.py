@@ -16,7 +16,7 @@ IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
 class ImageGerenatorModel:
     def __init__(self, config: dict) -> None:
         self.GOLD_CUT = config["generator"]["gold"]
-        self.ELIXIR_CUT = config["generator"]["elixir"]  
+        self.ELIXIR_CUT = config["generator"]["elixir"]
         self.DARK_CUT = config["generator"]["dark"]
 
     def generate_image(self):
@@ -71,13 +71,13 @@ class ImageGerenatorModel:
 
 if __name__ == "__main__":
     test_dict = {
-    "generator":{
-        "gold": [180, 145, 310, 175],
-        "elixir": [180, 188, 310, 217],
-        "dark": [180, 230, 310, 260]
-    },
-    "target": [1679, 760] 
-}
+        "generator": {
+            "gold": [180, 145, 310, 175],
+            "elixir": [180, 188, 310, 217],
+            "dark": [180, 230, 310, 260],
+        },
+        "target": [1679, 760],
+    }
     model = ImageGerenatorModel(test_dict)
     model.generate_image()
     print("feito meu patrao")

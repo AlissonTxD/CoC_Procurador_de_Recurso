@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLineEdit, QMessageBox, QLabel
 from PyQt5.QtGui import QIntValidator
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5 import uic
 
 from src.models.model_ocr_loader import OCRLoader
@@ -27,6 +27,7 @@ class ToolTipWindow(QLabel):
 
 class MainGuiView(QMainWindow):
     __instance = None
+    stop_signal = pyqtSignal()
 
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
@@ -84,6 +85,7 @@ class MainGuiView(QMainWindow):
             self.btn_search.setEnabled(False)
             self.btn_stop.setEnabled(False)
             self.btn_search.clicked.connect(self.__inicializar_procura_de_vila)
+            self.btn_stop.clicked.connect(self.stop_signal.emit)
             self.start_ocr_load()
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:
@@ -139,13 +141,6 @@ class MainGuiView(QMainWindow):
             return
         self.minimum = self.__return_inputs()
         self.controller_main.search(self.ocr)
-
-    def parar(self) -> None:
-        """Disables the stop button and enables the search button. Stops the search."""
-        self.btn_stop.setEnabled(False)
-        self.btn_search.setEnabled(True)
-        self.tooltip()
-        self.controller_main.stop()
 
     def __return_inputs(self):
         input_tuple = (
