@@ -84,8 +84,6 @@ class MainGuiView(QMainWindow):
             self.btn_search.setEnabled(False)
             self.btn_stop.setEnabled(False)
             self.btn_search.clicked.connect(self.__inicializar_procura_de_vila)
-            self.btn_stop.clicked.connect(self.parar)
-
             self.start_ocr_load()
 
     def __formatar_numero(self, qlineedit: QLineEdit) -> None:

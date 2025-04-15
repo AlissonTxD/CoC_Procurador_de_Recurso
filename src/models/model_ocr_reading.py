@@ -1,5 +1,6 @@
 from collections import namedtuple
 from time import sleep
+import pygetwindow as gw
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from pyautogui import pixelMatchesColor, click, pixel, moveTo
@@ -14,6 +15,8 @@ GOLD_IMAGE_PATH = "temp/gold.png"
 ELIXIR_IMAGE_PATH = "temp/elixir.png"
 DARK_IMAGE_PATH = "temp/dark.png"
 MP3_PATH = "src/midia/mp3/vila.mp3"
+WINDOW_TITLE = "Clash of Clans"
+
 Coord = namedtuple("Coord", "x y")
 
 class SearchModel(QObject):
@@ -28,20 +31,20 @@ class SearchModel(QObject):
         self.TARGET_PIXEL = Coord(config["target"][0], config["target"][1])
 
     def run(self):
-        print("run running")
         try:
             self.__format_minimum(self.minimum)
-            # foca na janela
+            self.__focus_in_window(WINDOW_TITLE)
+            click()
             sleep(1)
             while True:
                 while True:
-                    if self.__village_is_loaded():
-                        print("Vila carregada")
+                    if self.__village_is_loaded() or not self.__window_in_focus(WINDOW_TITLE):
+                        print("Vila carregada ou janela fora de foco")
                         break
-                    sleep(4)
+                    sleep(1)
                     pix = pixel(self.TARGET_PIXEL.x, self.TARGET_PIXEL.y)
-                    moveTo(self.TARGET_PIXEL.x, self.TARGET_PIXEL.y, duration=0.5)
                     print(f"Aguardando vila ser carregada: {pix}")
+                if not self.__window_in_focus(WINDOW_TITLE): break
                 self.image_generator.generate_image()
                 village_resources = self.__format_response_ocr()
                 print(self.minimum)
@@ -51,6 +54,7 @@ class SearchModel(QObject):
                     playsound(MP3_PATH)
                     break
                 else:
+                    self.__focus_in_window(WINDOW_TITLE)
                     click(x=self.TARGET_PIXEL.x, y=self.TARGET_PIXEL.y)
                     sleep(2)
         except Exception as e:
@@ -109,3 +113,24 @@ class SearchModel(QObject):
             if min != 0 and resource < min:
                 return False
         return True
+    
+    def __focus_in_window(self, window_name) -> None:
+         try:
+             window = gw.getWindowsWithTitle(window_name)[0]
+             window.activate()
+         except IndexError:
+             print(f"Janela com o título '{window_name}' não encontrada.")
+         except Exception as e:
+             print(f"Erro ao focar na janela: {e}")
+
+    def __window_in_focus(self, window_name) -> bool:
+         try:
+             active_window = gw.getActiveWindow()
+             if active_window is not None and active_window.title == window_name:
+                 return True
+             else:
+                 print("break por falta de foco na janela")
+                 return False
+         except Exception as e:
+             print(f"Erro ao verificar janela: {e}")
+             return False
