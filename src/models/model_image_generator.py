@@ -5,19 +5,20 @@ from time import sleep
 from pyautogui import screenshot
 from PIL import Image, ImageEnhance, ImageOps
 
-CoordCut = namedtuple("Corte", "x1 y1 x2 y2")
-IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
-GOLD_CUT = (180, 145, 310, 175)
-ELIXIR_CUT = (180, 188, 310, 217)
-DARK_CUT = (180, 230, 310, 260)
 
 MAIN_IMAGE_PATH = "temp/clash.png"
 GOLD_IMAGE_PATH = "temp/gold.png"
 ELIXIR_IMAGE_PATH = "temp/elixir.png"
 DARK_IMAGE_PATH = "temp/dark.png"
+IMG_FACTORS = (2.0, 0.5, 1.0, 2.5)
 
 
 class ImageGerenatorModel:
+    def __init__(self, config: dict) -> None:
+        self.GOLD_CUT = config["generator"]["gold"]
+        self.ELIXIR_CUT = config["generator"]["elixir"]  
+        self.DARK_CUT = config["generator"]["dark"]
+
     def generate_image(self):
         try:
             self.__take_screenshot()
@@ -48,9 +49,9 @@ class ImageGerenatorModel:
         img.save(MAIN_IMAGE_PATH)
 
     def __generate_sub_images(self):
-        self.__cut_image(GOLD_CUT, GOLD_IMAGE_PATH)
-        self.__cut_image(ELIXIR_CUT, ELIXIR_IMAGE_PATH)
-        self.__cut_image(DARK_CUT, DARK_IMAGE_PATH)
+        self.__cut_image(self.GOLD_CUT, GOLD_IMAGE_PATH)
+        self.__cut_image(self.ELIXIR_CUT, ELIXIR_IMAGE_PATH)
+        self.__cut_image(self.DARK_CUT, DARK_IMAGE_PATH)
 
     def __cut_image(self, cut_tuple, path):
         img = Image.open(MAIN_IMAGE_PATH)
@@ -69,5 +70,14 @@ class ImageGerenatorModel:
 
 
 if __name__ == "__main__":
-    model = ImageGerenatorModel()
+    test_dict = {
+    "generator":{
+        "gold": [180, 145, 310, 175],
+        "elixir": [180, 188, 310, 217],
+        "dark": [180, 230, 310, 260]
+    },
+    "target": [1679, 760] 
+}
+    model = ImageGerenatorModel(test_dict)
     model.generate_image()
+    print("feito meu patrao")

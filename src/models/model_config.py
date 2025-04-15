@@ -1,14 +1,14 @@
 import json
-from typing import List, Dict
+from typing import Dict
 
 PATH = "config.json"
 
 
-class ConfigurationRepository:
+class ConfigModel:
     def __init__(self) -> None:
         self.configurations = []
 
-    def get_json_data(self, path: str = PATH) -> List:
+    def get_json_data(self, path: str = PATH) -> Dict:
         self.__load_data(path)
         return self.configurations
 
@@ -18,14 +18,14 @@ class ConfigurationRepository:
         except FileNotFoundError:
             raise FileNotFoundError(f"Aquivo de configuração não encontrado:")
 
-    def __open_json(self, path: str) -> list:
+    def __open_json(self, path: str) -> Dict:
         with open(path, "r") as fp:
             var = json.load(fp)
             return var
 
 
 if __name__ == "__main__":
-    repository = ConfigurationRepository()
+    repository = ConfigModel()
     data = repository.get_json_data()
     print(data)
     for recurso in data["generator"]:

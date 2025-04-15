@@ -3,6 +3,7 @@ from PyQt5.QtCore import QThread
 from src.views.view_main import MainGuiView
 from src.models.model_image_generator import ImageGerenatorModel
 from src.models.model_ocr_reading import SearchModel
+from src.models.model_config import ConfigModel
 
 thread = None
 village_searcher = None
@@ -11,12 +12,13 @@ village_searcher = None
 def search_village():
     global thread, village_searcher
     view = MainGuiView()
+    config = ConfigModel()
+    config_data = config.get_json_data()
     view.btn_stop.setEnabled(True)
     view.btn_search.setEnabled(False)
     view.tooltip("Buscando Vilas com Recursos")
-
-    img_generator = ImageGerenatorModel()
-    village_searcher = SearchModel(view.ocr, img_generator, view.minimum)
+    img_generator = ImageGerenatorModel(config_data)
+    village_searcher = SearchModel(view.ocr, img_generator, view.minimum, config_data)
     thread = QThread()
     village_searcher.moveToThread(thread)
     thread.started.connect(village_searcher.run)
