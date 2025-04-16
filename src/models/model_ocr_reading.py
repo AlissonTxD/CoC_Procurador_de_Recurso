@@ -5,8 +5,8 @@ import pygetwindow as gw
 from PyQt5.QtCore import QObject, pyqtSignal
 from pyautogui import pixelMatchesColor, click, pixel, moveTo
 from playsound import playsound
-
 from src.models.model_image_generator import ImageGerenatorModel
+from src.utils import resource_path
 
 RGB = (255, 255, 255)
 RGB2 = (224, 224, 224)
@@ -14,7 +14,7 @@ RGB2 = (224, 224, 224)
 GOLD_IMAGE_PATH = "temp/gold.png"
 ELIXIR_IMAGE_PATH = "temp/elixir.png"
 DARK_IMAGE_PATH = "temp/dark.png"
-MP3_PATH = "src/midia/mp3/vila.mp3"
+MP3_PATH = resource_path("src/midia/mp3/vila.mp3")
 WINDOW_TITLE = "Clash of Clans"
 
 Coord = namedtuple("Coord", "x y")
@@ -54,6 +54,7 @@ class SearchModel(QObject):
                     print(f"Aguardando vila ser carregada: {pix}")
                 if not self.__window_in_focus(WINDOW_TITLE) or not self._running:
                     break
+                sleep(1)
                 self.image_generator.generate_image()
                 village_resources = self.__format_response_ocr()
                 print(self.minimum)

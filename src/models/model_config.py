@@ -9,14 +9,17 @@ class ConfigModel:
         self.configurations = []
 
     def get_json_data(self, path: str = PATH) -> Dict:
-        self.__load_data(path)
-        return self.configurations
+        try:
+            self.__load_data(path)
+            return {"sucess": True,"config" :self.configurations}
+        except Exception as e:
+            return {"sucess": False ,"error": str(e)}
 
     def __load_data(self, path: str) -> None:
         try:
             self.configurations = self.__open_json(path)
         except FileNotFoundError:
-            raise FileNotFoundError(f"Aquivo de configuração não encontrado:")
+            raise FileNotFoundError(f"Aquivo de configuração não encontrado\n Fale com seu Omigador mais próximo")
 
     def __open_json(self, path: str) -> Dict:
         with open(path, "r") as fp:

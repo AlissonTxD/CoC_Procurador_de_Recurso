@@ -15,11 +15,14 @@ def search_village():
     config = ConfigModel()
     view.stop_signal.connect(handle_stop_signal)
     config_data = config.get_json_data()
+    if not config_data["sucess"]:
+        view.popup_error(config_data["error"])
+        return
     view.btn_stop.setEnabled(True)
     view.btn_search.setEnabled(False)
     view.tooltip("Buscando Vilas com Recursos")
-    img_generator = ImageGerenatorModel(config_data)
-    village_searcher = SearchModel(view.ocr, img_generator, view.minimum, config_data)
+    img_generator = ImageGerenatorModel(config_data["config"])
+    village_searcher = SearchModel(view.ocr, img_generator, view.minimum, config_data["config"])
     thread = QThread()
     village_searcher.moveToThread(thread)
     thread.started.connect(village_searcher.run)
@@ -51,4 +54,5 @@ def handle_stop_signal():
 
 
 def show_error(error_msg: str):
-    print(error_msg)
+    view = MainGuiView()
+    view.popup_error(error_msg)
