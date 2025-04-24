@@ -136,7 +136,7 @@ class SearchModel(QObject):
     def __window_in_focus(self, window_name) -> bool:
         try:
             active_window = gw.getActiveWindow()
-            if active_window is not None and active_window.title == window_name:
+            if active_window is not None and window_name in active_window.title:
                 return True
             else:
                 print("break por falta de foco na janela")
