@@ -162,7 +162,6 @@ class MainGuiView(QMainWindow):
         self.worker.loaded.connect(self.on_ocr_loaded)
         self.worker.error.connect(self.on_ocr_error)
         self.worker.start()  # Inicia a thread
-        print("Carregando OCR em segundo plano...")
 
     def on_ocr_loaded(self, ocr_instance):
         self.ocr = ocr_instance
